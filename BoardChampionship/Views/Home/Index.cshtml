@@ -1,8 +1,48 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@model List<PlayerViewModel>
+
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome to the Board Championship</h1>
+</div>
+<div class="text-center">
+    <h4 class="display-5">Players</h4>
+</div>
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>NickName</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var player in Model)
+            {
+                <tr>
+                    <td>@player.Id</td>
+                    <td>@player.NickName</td>
+                    <td>
+                        @Html.ActionLink("Delete", "Delete", new { id = player.Id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<div class="text-center">
+    <a href="@Url.Action("AddNewPlayer", "Home")" class="btn btn-primary">Add New Player</a>
+</div>
+
+<div class="text-center">
+    <h4 class="display-5">Teams</h4>
+</div>
+
+<div class="text-center">
+    <a href="@Url.Action("GenerateTeams", "Home")" class="btn btn-primary">Generate Teams</a>
 </div>

@@ -1,0 +1,16 @@
+﻿@model PlayerViewModel
+
+@using (Html.BeginForm("AddNewPlayer", "Home", FormMethod.Post))
+{
+        <form>
+            <div class="form-row">
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Your NickName" name="NickName">
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </form>
+    @ViewBag.Player
+}
