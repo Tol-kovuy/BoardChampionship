@@ -1,0 +1,41 @@
+﻿@model GameViewModel
+
+@using (Html.BeginForm("StartGame", "Home", FormMethod.Post))
+{
+    <form>
+        <div class="form-row">
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Team1 vs Team2" name="Name">
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Scored Goals" name="ScoredGoals">
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Conceded Goals" name="ConcededGoals">
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.Team, new SelectList(ViewBag.TeamName), "---Select the Winner---", new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.GamesNumber, new SelectList(ViewBag.GamesType), "---Select a Number of Games---", new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Save Game</button>
+            </div>
+        </div>
+    </form>
+    @ViewBag.Player
+}
+
+
+                        
+
+

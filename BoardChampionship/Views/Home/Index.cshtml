@@ -7,6 +7,16 @@
 <div class="text-center">
     <h1 class="display-4">Welcome to the Board Championship</h1>
 </div>
+<div class="text-danger">
+    <h1 class="display-6">Championship Rules</h1>
+</div>
+<div class="text-danger">
+    <ul>
+        <li class="display-7">1. Two teams play each other 3 matches.</li>
+        <li class="display-7">2. Whoever won from the two previous teams goes to the final.</li>
+        <li class="display-7">3. And the final fight between the rest of the finalists, until one winner remains.</li>
+    </ul>
+</div>
 
 @if (Model.Any())
 {
@@ -44,4 +54,7 @@
 
 <div class="text-center">
     <a href="@Url.Action("AddNewPlayer", "Home")" class="btn btn-primary">Register for the championship</a>
+</div>
+<div class="text-center">
+    <a href="@Url.Action("StartGame", "Home")" class="btn btn-primary">Start Game</a>
 </div>

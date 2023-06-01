@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using BoardChampionship.BLL.Services.GameService;
 using BoardChampionship.BLL.Services.PlayerService;
 using BoardChampionship.BLL.Services.TeamService;
 using BoardChampionship.DAL.Entities;
+using BoardChampionship.DAL.Enums;
 using BoardChampionship.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 
 namespace BoardChampionship.Controllers;
@@ -14,34 +17,30 @@ public class HomeController : Controller
     private readonly IMapper _mapper;
     private readonly IPlayerService _playerService;
     private readonly ITeamService _teamService;
+    private readonly IGameService _gameService;
 
     public HomeController(
-          ILogger<HomeController> logger,
-          IMapper mapper,
-          IPlayerService playerService,
-          ITeamService teamService
+           ILogger<HomeController> logger,
+           IMapper mapper,
+           IPlayerService playerService,
+           ITeamService teamService,
+           IGameService gameService
         )
     {
         _logger = logger;
         _mapper = mapper;
         _playerService = playerService;
         _teamService = teamService;
+        _gameService = gameService;
     }
 
     public IActionResult Index()
     {
         var players = _playerService
             .GetPlayers()
+            .Select(player => _mapper.Map<PlayerViewModel>(player))
             .ToList();
-        var playersModel = new List<PlayerViewModel>();
-        foreach (var player in players)
-        {
-            var team = _teamService.GetTeam(player.TeamId);
-            player.Team = team;
-            var playerModel = _mapper.Map<PlayerViewModel>(player);
-            playersModel.Add(playerModel);
-        }
-        return View(playersModel);
+        return View(players);
     }
 
     [HttpGet]
@@ -58,6 +57,42 @@ public class HomeController : Controller
             var player = _mapper.Map<Player>(model);
             _playerService.AddPlayer(player);
             return RedirectToAction("Index");
+        }
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult StartGame()
+    {
+        var listGameNumber = new List<string>
+        {
+            GamesType.First_Game.ToString(),
+            GamesType.Second_Game.ToString(),
+            GamesType.Third_Game.ToString(),
+        };
+        ViewBag.GamesType = listGameNumber;
+        var listTeamName = new List<string>();
+        foreach (var name in _teamService.GetTeams())
+        {
+            listTeamName.Add(name.Name);
+        }
+        ViewBag.TeamName = listTeamName;
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult StartGame(GameViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var entity = _mapper.Map<Game>(model);
+            entity.TeamId = _teamService.GetByName(model.Team).Id;
+            //_gameService.StartGame(entity);
+            if (model.GamesNumber == GamesType.Third_Game)
+            {
+                var team = _teamService.GetTeam(entity.TeamId);
+                var winner = _gameService.DetermineTheWinner(team);
+            }
         }
         return View();
     }

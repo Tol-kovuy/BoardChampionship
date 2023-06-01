@@ -39,6 +39,12 @@ public class TeamRepository : ITeamRepository
         return team;
     }
 
+    public Team GetByName(string name)
+    {
+        var team = _context.Teams.SingleOrDefault(n => n.Name == name);
+        return team;
+    }
+
     public void Update(Team entity)
     {
         _context.Teams.Update(entity);

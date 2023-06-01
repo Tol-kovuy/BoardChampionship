@@ -1,4 +1,5 @@
 ﻿using BoardChampionship.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace BoardChampionship.DAL.Repositories.PlayerRepository;
 
@@ -27,7 +28,7 @@ public class PlayerRepository : IBaseRepository<Player>
 
     public IQueryable<Player> GetAll()
     {
-        var players = _context.Players;
+        var players = _context.Players.Include(t => t.Team);
         return players;
     }
 

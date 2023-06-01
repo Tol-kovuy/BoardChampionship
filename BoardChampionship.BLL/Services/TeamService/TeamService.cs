@@ -23,6 +23,12 @@ public class TeamService : ITeamService
         _teamRepository.Create(team);
     }
 
+    public Team GetByName(string name)
+    {
+       var team = _teamRepository.GetByName(name);
+        return team;
+    }
+
     public Team GetTeam(int teamId)
     {
         var team = _teamRepository.GetById(teamId);
