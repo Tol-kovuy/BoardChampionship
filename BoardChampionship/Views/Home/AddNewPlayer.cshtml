@@ -2,15 +2,21 @@
 
 @using (Html.BeginForm("AddNewPlayer", "Home", FormMethod.Post))
 {
-        <form>
-            <div class="form-row">
-                <div class="col">
-                    <input type="text" class="form-control" placeholder="Your NickName" name="NickName">
-                </div>
-                <div class="col">
-                    <button type="submit" class="btn btn-primary">Add</button>
-                </div>
+    <form>
+        <div class="form-row">
+            <div class="col">
+                <input type="text" class="form-control" placeholder="First Player NickName" name="FirstPlayerName">
             </div>
-        </form>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Second Player NickName" name="SecondPlayerName">
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Team Name" name="Team.Name">
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </form>
     @ViewBag.Player
 }

@@ -14,18 +14,9 @@ public class PlayerService : IPlayerService
         _playerRepository = playerRepository;
     }
 
-    public bool AddPlayer(Player player)
+    public void AddPlayer(Player player)
     {
-        var existPlayer = _playerRepository.GetAll().SingleOrDefault(p => p.NickName == player.NickName);
-        if (existPlayer == null)
-        {
-            _playerRepository.Create(player);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        _playerRepository.Create(player);
     }
 
     public Player GetPlayer(int id)

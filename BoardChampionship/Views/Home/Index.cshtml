@@ -7,17 +7,22 @@
 <div class="text-center">
     <h1 class="display-4">Welcome to the Board Championship</h1>
 </div>
-<div class="text-center">
-    <h4 class="display-5">Players</h4>
-</div>
+
 @if (Model.Any())
 {
+    <div class="text-center">
+        <h1 class="display-6">
+            Teams participating in the championship 2023
+        </h1>
+    </div>
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>NickName</th>
-                <th>Delete</th>
+                <th>Team</th>
+                <th>First Player</th>
+                <th>Second Player</th>
+                <th>Options</th>
             </tr>
         </thead>
         <tbody>
@@ -25,9 +30,11 @@
             {
                 <tr>
                     <td>@player.Id</td>
-                    <td>@player.NickName</td>
+                    <td>@player.Team.Name</td>
+                    <td>@player.FirstPlayerName</td>
+                    <td>@player.SecondPlayerName</td>
                     <td>
-                        @Html.ActionLink("Delete", "Delete", new { id = player.Id })
+                        @Html.ActionLink("Exclude a team from the competition", "Delete", new { id = player.Id })
                     </td>
                 </tr>
             }
@@ -36,13 +43,5 @@
 }
 
 <div class="text-center">
-    <a href="@Url.Action("AddNewPlayer", "Home")" class="btn btn-primary">Add New Player</a>
-</div>
-
-<div class="text-center">
-    <h4 class="display-5">Teams</h4>
-</div>
-
-<div class="text-center">
-    <a href="@Url.Action("GenerateTeams", "Home")" class="btn btn-primary">Generate Teams</a>
+    <a href="@Url.Action("AddNewPlayer", "Home")" class="btn btn-primary">Register for the championship</a>
 </div>

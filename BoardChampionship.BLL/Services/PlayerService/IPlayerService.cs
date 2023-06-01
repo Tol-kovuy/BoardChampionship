@@ -1,12 +1,11 @@
 ﻿using BoardChampionship.DAL.Entities;
 
-namespace BoardChampionship.BLL.Services.PlayerService
+namespace BoardChampionship.BLL.Services.PlayerService;
+
+public interface IPlayerService
 {
-    public interface IPlayerService
-    {
-        bool AddPlayer(Player player);
-        Player GetPlayer(int id);
-        IQueryable<Player> GetPlayers();
-        void RemovePlayer(int id);
-    }
+    void AddPlayer(Player player);
+    Player GetPlayer(int id);
+    IQueryable<Player> GetPlayers();
+    void RemovePlayer(int id);
 }

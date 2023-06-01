@@ -9,5 +9,6 @@ public class MapperProfile : Profile
     public MapperProfile()
     {
         CreateMap<Player, PlayerViewModel>().ReverseMap();
+        CreateMap<Team, TeamViewModel>().ReverseMap(); 
     }
 }

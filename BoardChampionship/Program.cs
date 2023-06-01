@@ -1,8 +1,10 @@
 using BoardChampionship;
 using BoardChampionship.BLL.Services.PlayerService;
+using BoardChampionship.BLL.Services.TeamService;
 using BoardChampionship.DAL;
 using BoardChampionship.DAL.Entities;
 using BoardChampionship.DAL.Repositories.PlayerRepository;
+using BoardChampionship.DAL.Repositories.TeamRepository;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -22,7 +24,9 @@ internal class Program
 
         });
         builder.Services.AddScoped<IBaseRepository<Player>, PlayerRepository>();
+        builder.Services.AddScoped<ITeamRepository, TeamRepository>();
         builder.Services.AddScoped<IPlayerService, PlayerService>();
+        builder.Services.AddScoped<ITeamService, TeamService>();
         builder.Services.AddAutoMapper(typeof(MapperProfile));
 
         var app = builder.Build();
