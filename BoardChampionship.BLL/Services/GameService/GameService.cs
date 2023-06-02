@@ -1,4 +1,5 @@
 ﻿using BoardChampionship.DAL.Entities;
+using BoardChampionship.DAL.Enums;
 using BoardChampionship.DAL.Repositories.GameRepository;
 
 namespace BoardChampionship.BLL.Services.GameService;
@@ -22,13 +23,18 @@ public class GameService : IGameService
 
     public bool DetermineTheWinner(Team team)
     {
-        var games = _gameRepository.GetAll().Where(team => team.TeamId == team.Id);
-
-        var res = games.Select(result => result.GameResult == DAL.Enums.GameResultType.Win)
+        var games = _gameRepository
+            .GetAll()
+            .Where(x => x.TeamId == team.Id)
             .ToList();
-        if (res.Count > 2)
+        if (games.Count >= 2) // Magic digit
         {
             return true;
+        }
+        if (games.Count == 3) // Magic digit
+        {
+            // Here must be method 'AddOneMoreGame()'
+            // If i will be has time, i write it ;)
         }
         return false;
     }

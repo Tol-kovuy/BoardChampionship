@@ -24,5 +24,6 @@ public class MapperProfile : Profile
             .ForMember(dest => dest.ScoredGoals, opt => opt.MapFrom(src => src.ScoredGoals))
             .ForMember(dest => dest.ConcededGoals, opt => opt.MapFrom(src => src.ConcededGoals))
             .ForMember(dest => dest.Team, opt => opt.Ignore());
+        CreateMap<Winner, WinnerViewModel>().ReverseMap();
     }
 }

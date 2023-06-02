@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BoardChampionship.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230601133918_Init")]
-    partial class Init
+    [Migration("20230602102634_AddFieldToWinner")]
+    partial class AddFieldToWinner
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,8 +48,6 @@ namespace BoardChampionship.DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TeamId");
 
                     b.ToTable("Games");
                 });
@@ -94,15 +92,25 @@ namespace BoardChampionship.DAL.Migrations
                     b.ToTable("Teams");
                 });
 
-            modelBuilder.Entity("BoardChampionship.DAL.Entities.Game", b =>
+            modelBuilder.Entity("BoardChampionship.DAL.Entities.Winner", b =>
                 {
-                    b.HasOne("BoardChampionship.DAL.Entities.Team", "Team")
-                        .WithMany()
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Navigation("Team");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WinnerTeamId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WinnerTeamId");
+
+                    b.ToTable("Winners");
                 });
 
             modelBuilder.Entity("BoardChampionship.DAL.Entities.Player", b =>
@@ -114,6 +122,17 @@ namespace BoardChampionship.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("BoardChampionship.DAL.Entities.Winner", b =>
+                {
+                    b.HasOne("BoardChampionship.DAL.Entities.Team", "WinnerTeam")
+                        .WithMany()
+                        .HasForeignKey("WinnerTeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("WinnerTeam");
                 });
 
             modelBuilder.Entity("BoardChampionship.DAL.Entities.Team", b =>

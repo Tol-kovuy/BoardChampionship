@@ -2,6 +2,7 @@
 using BoardChampionship.BLL.Services.GameService;
 using BoardChampionship.BLL.Services.PlayerService;
 using BoardChampionship.BLL.Services.TeamService;
+using BoardChampionship.BLL.Services.WinnerService;
 using BoardChampionship.DAL.Entities;
 using BoardChampionship.DAL.Enums;
 using BoardChampionship.Models;
@@ -18,13 +19,15 @@ public class HomeController : Controller
     private readonly IPlayerService _playerService;
     private readonly ITeamService _teamService;
     private readonly IGameService _gameService;
+    private readonly IWinnerService _winnerService;
 
     public HomeController(
            ILogger<HomeController> logger,
            IMapper mapper,
            IPlayerService playerService,
            ITeamService teamService,
-           IGameService gameService
+           IGameService gameService,
+           IWinnerService winnerService
         )
     {
         _logger = logger;
@@ -32,6 +35,7 @@ public class HomeController : Controller
         _playerService = playerService;
         _teamService = teamService;
         _gameService = gameService;
+        _winnerService = winnerService;
     }
 
     public IActionResult Index()
@@ -40,6 +44,21 @@ public class HomeController : Controller
             .GetPlayers()
             .Select(player => _mapper.Map<PlayerViewModel>(player))
             .ToList();
+        var winners = _winnerService
+            .GetAll()
+            .Select(winner => _mapper.Map<WinnerViewModel>(winner))
+            .ToList();
+        if (winners != null)
+        {
+            foreach (var player in players)
+            {
+                var win = winners.FirstOrDefault(x => x.Name == player.Team.Name);
+                if (win != null)
+                {
+                    player.Winner = win;
+                }
+            }
+        }
         return View(players);
     }
 
@@ -87,14 +106,46 @@ public class HomeController : Controller
         {
             var entity = _mapper.Map<Game>(model);
             entity.TeamId = _teamService.GetByName(model.Team).Id;
-            //_gameService.StartGame(entity);
+            _gameService.StartGame(entity);
             if (model.GamesNumber == GamesType.Third_Game)
             {
                 var team = _teamService.GetTeam(entity.TeamId);
                 var winner = _gameService.DetermineTheWinner(team);
+                if (winner)
+                {
+                    var winnerEntity = new Winner
+                    {
+                        WinnerTeamId= team.Id,
+                        Name = team.Name
+                    };
+                    _winnerService.Add(winnerEntity);
+                }
+                else
+                {
+                    var gameName = _gameService
+                        .GetGames()
+                        .Where(x => x.TeamId == team.Id)
+                        .First()
+                        .Name;
+                    var secondTeamList = _gameService
+                        .GetGames()
+                        .Where(x => x.Name == gameName)
+                        .ToList();
+                    var secondTeamId = secondTeamList
+                        .Where(x => x.TeamId != team.Id)
+                        .First()
+                        .TeamId;
+                    var secondTeam = _teamService.GetTeam(secondTeamId);
+                    var winnerEntity = new Winner
+                    {
+                        WinnerTeamId = secondTeam.Id,
+                        Name = secondTeam.Name
+                    };
+                    _winnerService.Add(winnerEntity);
+                }
             }
         }
-        return View();
+        return RedirectToAction("StartGame");
     }
 
     public IActionResult Delete(int id)

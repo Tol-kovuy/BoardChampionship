@@ -58,3 +58,33 @@
 <div class="text-center">
     <a href="@Url.Action("StartGame", "Home")" class="btn btn-primary">Start Game</a>
 </div>
+
+
+@if (Model.Any())
+{
+    <div class="text-center">
+        <h1 class="display-6">
+            Teams reaching the final
+        </h1>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Team</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var player in Model)
+            {
+                <tr>
+                    @if (player.Winner != null)
+                    {
+                        <td>@player.Winner.Id</td>
+                        <td>@player.Winner.Name</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
