@@ -1,1 +1,29 @@
-﻿
+﻿@model IList<AbsoluteWinnerViewModel>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Absolute Winners</title>
+</head>
+<body>
+    <h1>Absolute Winners</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Team</th>
+                <th>Wins</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var winner in Model)
+            {
+                <tr>
+                    <td>@winner.Team</td>
+                    <td>@winner.Wins</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

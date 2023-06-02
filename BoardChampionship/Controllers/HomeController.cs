@@ -180,9 +180,10 @@ public class HomeController : Controller
                                    .Select(x => x.Name)
                                    .GroupBy(x => x)
                                    .Where(group => group.Count() > 1)
-                                   .Select(y => new { Element = y.Key, Wins = y.Count() })
+                                   .Select(y => new AbsoluteWinnerViewModel{ Team = y.Key, Wins = y.Count() })
                                    .ToList();
-        return View();
+        
+        return View(winner);
     }
 
     public IActionResult Delete(int id)
