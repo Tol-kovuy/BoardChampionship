@@ -115,26 +115,23 @@ public class HomeController : Controller
                 {
                     var winnerEntity = new Winner
                     {
-                        WinnerTeamId= team.Id,
+                        WinnerTeamId = team.Id,
                         Name = team.Name
                     };
                     _winnerService.Add(winnerEntity);
                 }
                 else
                 {
-                    var gameName = _gameService
-                        .GetGames()
-                        .Where(x => x.TeamId == team.Id)
-                        .First()
-                        .Name;
-                    var secondTeamList = _gameService
-                        .GetGames()
-                        .Where(x => x.Name == gameName)
-                        .ToList();
-                    var secondTeamId = secondTeamList
-                        .Where(x => x.TeamId != team.Id)
-                        .First()
-                        .TeamId;
+                    var gameName = _gameService.GetGames()
+                                               .Where(x => x.TeamId == team.Id)
+                                               .First()
+                                               .Name;
+                    var secondTeamList = _gameService.GetGames()
+                                                     .Where(x => x.Name == gameName)
+                                                     .ToList();
+                    var secondTeamId = secondTeamList.Where(x => x.TeamId != team.Id)
+                                                     .First()
+                                                     .TeamId;
                     var secondTeam = _teamService.GetTeam(secondTeamId);
                     var winnerEntity = new Winner
                     {
@@ -146,6 +143,46 @@ public class HomeController : Controller
             }
         }
         return RedirectToAction("StartGame");
+    }
+
+    [HttpGet]
+    public IActionResult PlayFinal()
+    {
+        var teams = _winnerService.GetAll();
+        var finalTeams = new List<string>();
+        foreach (var team in teams)
+        {
+            finalTeams.Add(team.Name);
+        }
+        ViewBag.TeamName = finalTeams;
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult PlayFinal(GameViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var team = _teamService.GetByName(model.Team);
+            var winner = new Winner
+            {
+                Name = team.Name,
+                WinnerTeamId = team.Id
+            };
+            _winnerService.Add(winner);
+        }
+        return RedirectToAction("PlayFinal");
+    }
+
+    public IActionResult AbsoluteWinner()
+    {
+        var winner = _winnerService.GetAll()
+                                   .Select(x => x.Name)
+                                   .GroupBy(x => x)
+                                   .Where(group => group.Count() > 1)
+                                   .Select(y => new { Element = y.Key, Wins = y.Count() })
+                                   .ToList();
+        return View();
     }
 
     public IActionResult Delete(int id)
