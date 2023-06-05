@@ -106,7 +106,7 @@ public class HomeController : Controller
         {
             var entity = _mapper.Map<Game>(model);
             entity.TeamId = _teamService.GetByName(model.Team).Id;
-            _gameService.StartGame(entity);
+            //_gameService.StartGame(entity);
             if (model.GamesNumber == GamesType.Third_Game)
             {
                 var team = _teamService.GetTeam(entity.TeamId);
