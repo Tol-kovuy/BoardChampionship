@@ -25,7 +25,7 @@ public class GameViewModel
             return GameResultType.Draw;
         }
     }
-    public GamesType GamesNumber { get; set; }
+    public RoundNumberType GamesNumber { get; set; }
 
     [NotMapped]
     public string Team { get; set; }

@@ -35,7 +35,7 @@ namespace BoardChampionship.DAL.Migrations
                     b.Property<int>("ConcededGoals")
                         .HasColumnType("int");
 
-                    b.Property<int>("GamesNumber")
+                    b.Property<int>("Raund")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")

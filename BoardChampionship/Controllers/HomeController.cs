@@ -85,9 +85,9 @@ public class HomeController : Controller
     {
         var listGameNumber = new List<string>
         {
-            GamesType.First_Game.ToString(),
-            GamesType.Second_Game.ToString(),
-            GamesType.Third_Game.ToString(),
+            RoundNumberType.First_Game.ToString(),
+            RoundNumberType.Second_Game.ToString(),
+            RoundNumberType.Third_Game.ToString(),
         };
         ViewBag.GamesType = listGameNumber;
         var listTeamName = new List<string>();
@@ -107,7 +107,7 @@ public class HomeController : Controller
             var entity = _mapper.Map<Game>(model);
             entity.TeamId = _teamService.GetByName(model.Team).Id;
             //_gameService.StartGame(entity);
-            if (model.GamesNumber == GamesType.Third_Game)
+            if (model.GamesNumber == RoundNumberType.Third_Game)
             {
                 var team = _teamService.GetTeam(entity.TeamId);
                 var winner = _gameService.DetermineTheWinner(team);
